@@ -1,6 +1,7 @@
 
 import config from "../config.json"
 import mysql from "mysql2/promise"
+import 'mysql2'; // Explicitly import for Sequelize/Vercel
 import { Sequelize } from "sequelize"
 
 export interface Database {
