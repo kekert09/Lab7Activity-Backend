@@ -19,7 +19,18 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }));
 app.use(cookieParser());
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+const options = {
+    customCssUrl: [
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.css'
+    ],
+    customJs: [
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-standalone-preset.js'
+    ]
+};
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
 app.get("/", (req, res) => res.redirect("/api-docs"))
 app.use("/accounts", accountsController)
 app.use("/users", userController)
