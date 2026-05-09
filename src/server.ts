@@ -29,13 +29,19 @@ app.use(errorHandler)
 const PORT = process.env.PORT || 4000
 
 
+// Initialize database
 initialize()
     .then(() => {
-        app.listen(PORT, () => {
-            console.log(`SERVER IS RUNNING ON http://localhost:${PORT}`)
-            console.log(`TEST WITH: POST /users with {email, password, ....}`)
-        })
+        // Only start the server if not running on Vercel
+        if (!process.env.VERCEL) {
+            app.listen(PORT, () => {
+                console.log(`SERVER IS RUNNING ON http://localhost:${PORT}`)
+                console.log(`TEST WITH: POST /users with {email, password, ....}`)
+            })
+        }
     }).catch((err) => {
         console.log(`Failed to initialize database::`, err)
-        process.exit(1)
+        if (!process.env.VERCEL) process.exit(1)
     })
+
+export default app;
