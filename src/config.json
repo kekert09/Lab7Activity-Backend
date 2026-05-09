@@ -9,7 +9,9 @@
     "secret": "SUPER_SECRET_KEY",
     "emailform": "rkmendez76@gmail.com",
     "smtpOptions": {
-        "service": "gmail",
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "secure": true,
         "auth": {
             "user": "rkmendez76@gmail.com",
             "pass": "pvofwzkzyrkpdzyy"
