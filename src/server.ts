@@ -19,6 +19,20 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }));
 app.use(cookieParser());
 
+// Middleware to ensure DB is initialized before any request
+let initPromise: Promise<void> | null = null;
+app.use(async (req, res, next) => {
+    if (!initPromise) {
+        initPromise = initialize();
+    }
+    try {
+        await initPromise;
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
 const options = {
     customCssUrl: [
         'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css',
@@ -40,19 +54,12 @@ app.use(errorHandler)
 const PORT = process.env.PORT || 4000
 
 
-// Initialize database
-initialize()
-    .then(() => {
-        // Only start the server if not running on Vercel
-        if (!process.env.VERCEL) {
-            app.listen(PORT, () => {
-                console.log(`SERVER IS RUNNING ON http://localhost:${PORT}`)
-                console.log(`TEST WITH: POST /users with {email, password, ....}`)
-            })
-        }
-    }).catch((err) => {
-        console.log(`Failed to initialize database::`, err)
-        if (!process.env.VERCEL) process.exit(1)
-    })
+if (!process.env.VERCEL) {
+    initialize().then(() => {
+        app.listen(PORT, () => {
+            console.log(`SERVER IS RUNNING ON http://localhost:${PORT}`);
+        });
+    });
+}
 
 export default app;
