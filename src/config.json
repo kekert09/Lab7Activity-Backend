@@ -1,0 +1,18 @@
+{
+    "database": {
+        "host": "153.92.15.31",
+        "port": 3306,
+        "user": "u875409848_mendez",
+        "password": "2qW^sUg=M",
+        "database": "u875409848_mendez"
+    },
+    "secret": "SUPER_SECRET_KEY",
+    "emailform": "rkmendez76@gmail.com",
+    "smtpOptions": {
+        "service": "gmail",
+        "auth": {
+            "user": "rkmendez76@gmail.com",
+            "pass": "pvofwzkzyrkpdzyy"
+        }
+    }
+}
