@@ -30,20 +30,15 @@ app.use(async (req, res, next) => {
     }
 });
 
-const options = {
-    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css',
-    customJs: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.js'
+const options: any = {
+    customCssUrl: 'https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css',
+    customJs: [
+        'https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js',
+        'https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js'
+    ]
 };
 
-// Serve Swagger JSON
-app.get("/api-docs/swagger.json", (req, res) => res.json(swaggerDocument));
-
-// Serve Swagger UI
-app.use("/api-docs", swaggerUi.serve);
-app.get("/api-docs", (req, res) => {
-    const html = swaggerUi.generateHTML(swaggerDocument, options);
-    res.send(html);
-});
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 app.get("/", (req, res) => res.redirect("/api-docs"))
 app.use("/accounts", accountsController)
