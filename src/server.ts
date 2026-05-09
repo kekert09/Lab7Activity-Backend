@@ -6,10 +6,7 @@ import userController from "./users/users.controller"
 import accountsController from "./accounts/accounts.controller"
 import cookieParser from "cookie-parser"
 import swaggerUi from "swagger-ui-express"
-import YAML from "yamljs"
-import path from "path"
-
-const swaggerDocument = YAML.load(path.join(__dirname, "swagger.yaml"))
+import { swaggerDocument } from "./swagger.doc"
 
 const app: Application = express()
 
@@ -38,7 +35,16 @@ const options = {
     customJs: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.js'
 };
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
+// Serve Swagger JSON
+app.get("/api-docs/swagger.json", (req, res) => res.json(swaggerDocument));
+
+// Serve Swagger UI
+app.use("/api-docs", swaggerUi.serve);
+app.get("/api-docs", (req, res) => {
+    const html = swaggerUi.generateHTML(swaggerDocument, options);
+    res.send(html);
+});
+
 app.get("/", (req, res) => res.redirect("/api-docs"))
 app.use("/accounts", accountsController)
 app.use("/users", userController)
