@@ -42,7 +42,7 @@ export default function (sequelize: Sequelize): typeof User {
             email: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true
+                unique: 'email'
             },
             passwordHash: {
                 type: DataTypes.STRING,
